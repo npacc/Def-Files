@@ -1,0 +1,18 @@
+Bootstrap: docker
+From: debian:latest
+
+%post
+    apt-get update
+    apt-get -y upgrade
+    apt-get -y install git make
+    apt-get -y install autoconf bash curl g++ gcc libc-dev
+    apt-get -y install perl python3-pip python3
+  
+    cd /usr/local/bin
+    git clone https://github.com/ewels/MultiQC.git
+    cd MultiQC
+    pip3 install multiqc
+
+%labels
+    Maintainer n-pacchiarini
+    Version multiqc-1.8

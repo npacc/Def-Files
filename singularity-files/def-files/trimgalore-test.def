@@ -1,0 +1,27 @@
+Bootstrap: docker
+From: alpine:3.8
+
+%post
+    apk update
+    apk upgrade
+    apk add git make
+    apk add bash curl gcc libc-dev
+    apk add perl py3-pip python3 python3-dev
+    pip3 install cutadapt
+
+    apk add openjdk7-jre
+    cd /usr/local/bin
+    curl -fsSL "http://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.9.zip" --output fastqc_v0.11.8.zip
+    unzip fastqc_v0.11.8.zip
+    cd /usr/local/bin/FastQC 
+    chmod 755 fastqc
+    ln -s /usr/local/bin/FastQC/fastqc /usr/local/bin
+
+    cd /usr/local/bin
+    curl -fsSL "https://github.com/FelixKrueger/TrimGalore/archive/0.5.0.tar.gz" -o trim_galore.tar.gz
+    tar xvzf trim_galore.tar.gz
+    ln -s /usr/local/bin/TrimGalore-0.5.0/trim_galore /usr/local/bin/trim_galore
+
+%labels
+    Maintainer n-pacchiarini
+    Version trim_galore-0.5.0 
