@@ -1,22 +1,19 @@
 Bootstrap: docker
-From: alpine:3.8
+From: debian:latest
+
 %post
-    apk update
-    apk upgrade
-    apk add git make
-    apk add bash gcc bzip2-dev libc-dev ncurses-dev openjdk8-jre-base xz-dev zlib-dev
-    git clone https://github.com/lh3/minimap2 /tmp/minimap2
-    cd /tmp/minimap2
-    make
-    mv /tmp/minimap2/minimap2 /usr/local/bin/
-    rm -rf /tmp/minimap2
-    wget https://github.com/samtools/samtools/releases/download/1.8/samtools-1.8.tar.bz2 -O /tmp/samtools.tar.bz2
-    cd /tmp
-    tar xvjf samtools.tar.bz2
-    cd samtools-1.8 && ./configure && make && make install
-    wget https://github.com/broadinstitute/picard/releases/download/2.18.14/picard.jar -O /usr/local/bin/picard.jar
-    wget https://raw.githubusercontent.com/connor-lab/singularity-recipes/master/scripts/picard -O /usr/local/bin/picard
-    chmod 775 /usr/local/bin/picard
+    apt-get update
+    apt-get -y upgrade
+    apt-get -y install git make
+    apt-get -y install bash curl g++ gcc libbz2-dev liblzma-dev zlib1g-dev
+    apt-get -y install perl python3 python3-dev
+  
+    cd /usr/local/bin
+    git clone https://github.com/lh3/minimap2
+    cd minimap2 && make
+
 %labels
-    Maintainer m-bull
-    Version minimap2-latest
+    Maintainer n-pacchiarini
+    Version minimap-2.17
+            samtools
+            picard
