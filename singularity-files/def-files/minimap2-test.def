@@ -5,15 +5,20 @@ From: debian:latest
     apt-get update
     apt-get -y upgrade
     apt-get -y install git make
-    apt-get -y install bash curl g++ gcc libbz2-dev liblzma-dev zlib1g-dev
-    apt-get -y install perl python3 python3-dev
-  
+    apt-get -y install bash curl g++ gcc 
+    apt-get -y install perl python3 python3-dev openjdk-11-jre
+    
+    apt-get -y install libc6 zlib1g minimap2
+
+    apt-get -y install libhts2 libncurses6 libtinfo6 cwltool samtools
+
     cd /usr/local/bin
-    git clone https://github.com/lh3/minimap2
-    cd minimap2 && make
+    curl -fsSL "https://github.com/broadinstitute/picard/releases/download/2.22.3/picard.jar" --output picard.jar
+    curl https://raw.githubusercontent.com/connor-lab/singularity-recipes/master/scripts/picard -o /usr/local/bin/picard
+    chmod 775 /usr/local/bin/picard
 
 %labels
     Maintainer n-pacchiarini
     Version minimap-2.17
-            samtools
-            picard
+            samtools-1.9
+            picard-2.22
