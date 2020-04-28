@@ -1,0 +1,16 @@
+Bootstrap: docker
+From: debian:latest
+
+%post
+    apt-get update
+    apt-get -y upgrade
+    apt-get -y install git make
+    apt-get -y install bash curl g++ gcc 
+    apt-get -y install default-jre-headless fastaq kmc mummer 
+    apt-get -y install perl python3 python3-networkx python3-numpy python3-pysam
+    apt-get -y install samtools smalt bioperl r-base-core trimmomatic
+    apt-get -y install iva
+
+%labels
+    Maintainer n-pacchiarini
+    Version iva-1.08
