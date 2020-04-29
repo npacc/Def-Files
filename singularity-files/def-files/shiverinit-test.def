@@ -4,39 +4,51 @@ From: debian:latest
 %post
     apt-get update
     apt-get -y upgrade
-    apt-get install -y git make curl
-    apt-get install -y bc bzip2 libbz2-dev gcc libncurses-dev openjdk-11-jdk-headless unzip xz-utils zlib1g-dev liblzma-dev
-    apt-get install -y python-dev python-pip python3-pip
-    apt-get install -y python3-dev python3-pip python3-setuptools
-    #easy_install-3.6 pip
-    pip2 install biopython
-    pip3 install pyfastaq
-    curl -fsSL 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz' | tar -xz -C /usr/local/bin
+    apt-get -y install git make
+    apt-get -y install bash curl g++ gcc 
+    apt-get -y install bc bzip2 libbz2-dev liblzma-dev libncurses5-dev openjdk-11-jre zlib1g-dev unzip
+    apt-get -y install python2-dev
+    apt-get -y install python3 python3-dev python3-pip
+
+    apt-get -y install python-biopython
+    apt-get -y install fastaq 
+
+    curl -fsSL "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.7.1/ncbi-blast-2.7.1+-x64-linux.tar.gz" | tar -xz -C /usr/local/bin
     find /usr/local/bin/ncbi-blast*/bin -maxdepth 1 -executable -type f -exec ln -s {} /usr/local/bin \;
-    curl -fsSL 'https://mafft.cbrc.jp/alignment/software/mafft-7.407-without-extensions-src.tgz' | tar -xz -C /tmp/
+
+    curl -fsSL "https://mafft.cbrc.jp/alignment/software/mafft-7.407-without-extensions-src.tgz" | tar -xz -C /tmp/
     cd /tmp/mafft-7.407-without-extensions/core && make && make install
-    curl -fsSL 'https://downloads.sourceforge.net/project/smalt/smalt-0.7.6-static.tar.gz' | tar -xz -C /tmp/
+    
+    curl -fsSL "https://downloads.sourceforge.net/project/smalt/smalt-0.7.6-static.tar.gz" | tar -xz -C /tmp/
     cd /tmp/smalt-0.7.6 && ./configure && make && make install
-    curl -fsSL 'https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2' | tar -xj -C /tmp/
+ 
+    curl -fsSL "https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2" | tar -xj -C /tmp/
     cd /tmp/samtools-1.9 && ./configure && make && make install
-    curl -fsSL 'http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.38.zip' -o /usr/local/bin/Trimmomatic-0.38.zip
+
+    curl -fsSL "http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/Trimmomatic-0.38.zip" -o /usr/local/bin/Trimmomatic-0.38.zip
     cd /usr/local/bin && unzip Trimmomatic-0.38.zip
     ln -s /usr/local/bin/Trimmomatic-0.38/trimmomatic-0.38.jar /usr/local/bin
-    curl -fsSL https://raw.githubusercontent.com/connor-lab/singularity-recipes/master/scripts/trimmomatic -o /usr/local/bin/trimmomatic
+    curl -fsSL "https://raw.githubusercontent.com/connor-lab/singularity-recipes/master/scripts/trimmomatic" -o /usr/local/bin/trimmomatic
     chmod 775 /usr/local/bin/trimmomatic
+
     git clone https://github.com/lh3/seqtk.git /tmp/seqtk
     cd /tmp/seqtk
     make
     cd
     cp /tmp/seqtk/seqtk /usr/local/bin
     rm -rf /tmp/seqtk
+
     git clone https://github.com/ChrisHIV/shiver/ /usr/local/bin/shiver
     #cd /usr/local/bin/shiver
     #git reset --hard ce3fc9fc05d2f4cef9e5e8ae6ec3f91e490b5165
+    
     #curl -fsSL 'https://github.com/ChrisHIV/shiver/archive/v1.3.5.tar.gz' | tar -xz -C /usr/local/bin && mv /usr/local/bin/shiver-1.3.5 /usr/local/bin/shiver
-   #find /usr/local/bin/shiver -maxdepth 1 -executable -type f -exec cp {} /usr/local/bin \;
+    
+   # find /usr/local/bin/shiver -maxdepth 1 -executable -type f -exec cp {} /usr/local/bin \;
+
    # sed -e '/^ThisDir/ s/^#*/#/' -i /usr/local/bin/shiver_*.sh
    # sed -i '/^ToolsDir/i ThisDir="/usr/local/bin/shiver"' /usr/local/bin/shiver_*.sh
+
     rm -rf /tmp/seqtk /tmp/samtools* /tmp/smalt* /tmp/mafft*
 
 %environment
@@ -45,6 +57,9 @@ From: debian:latest
     PATH=$PATH:/usr/local/bin/shiver
     export PATH
 
+%runscript
+    exec shiver_init.sh "$@"
+
 %labels
-    Maintainer m-bull a-gaskin
-    Version shiver-latest
+    Maintainer n-pacchiarini
+    Version shiver 1.3.5
