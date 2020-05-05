@@ -7,20 +7,12 @@ From: debian:latest
     apt-get install -y git make 
     apt-get install -y curl bash librust-bzip2-dev g++ gcc bzip2 libc6 libc6-dev zlib1g-dev libncurses-dev libghc-bzlib-dev
     apt-get install -y xz-utils musl-dev cpanminus libperl-dev tzdata 
-    apt-get install -y libfreetype6 libpng-dev python2 python2-dev python-pip
+    apt-get install -y libfreetype6 libpng-dev python2 python2-dev python-pip python3
     apt-get install -y perl libpath-tiny-perl libjson-perl libdata-dumper-concise-perl libfile-slurp-perl libdatetime-perl libdatetime-timezone-perl
 
     pip install sierrapy
 
-    #No idea why this wants to be installed on its own, but it works.
-    #cpanm --no-wget IPC::System::Simple 
-
     cpanm --no-wget RTF::Writer 
-    #cpanm --no-wget JSON 
-    #cpanm --no-wget Data::Dumper
-    #cpanm --no-wget File::Slurp
-    #cpanm --no-wget DateTime
-    #cpanm --no-wget DateTime::TimeZone
 
     curl -fsSL 'https://raw.githubusercontent.com/connor-lab/singularity-recipes/master/scripts/buildreport.pl' -o /usr/local/bin/buildreport.pl
     chmod 775 /usr/local/bin/buildreport.pl
@@ -34,5 +26,5 @@ From: debian:latest
     exec sierrapy "$@"
 
 %labels
-    Maintainer n-pacchiarini
+    Maintainer m-bull n-pacchiarini
     Version sierappy
